@@ -7,7 +7,7 @@ import requests
 import json
 import re
 
-from secret import *
+from urls import *
 
 class Shorts:
     def __init__(self, video_id:str,clip_length:float=None) -> None:
@@ -80,7 +80,7 @@ class Shorts:
             self.original_vid=self.downloading_folder+video_id
 
     def extract_clips(self):
-        download_
+        # download_
         # https://stackoverflow.com/questions/37317140/cutting-out-a-portion-of-video-python
         for i,clip in enumerate(self.heat_data["clips"]):
             ffmpeg_extract_subclip(self.original_vid, clip[0], clip[1], targetname=f"clip{i}.mp4")
