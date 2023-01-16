@@ -6,3 +6,6 @@
 5. edit clips (music, subtitiles, visual effects...)
 6. create a title & ?desc?
 7. upload
+
+## To Do: 
+1. set shorts start/end based on the data recieved from the most replayed.

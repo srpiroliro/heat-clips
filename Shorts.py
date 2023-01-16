@@ -12,7 +12,7 @@ import os
 from urls import *
 
 class Shorts:
-    def __init__(self, clip_length:float=30,clip_start_point:float=1/2) -> None:
+    def __init__(self, clip_length:float=30,clip_start_point:float=1/4) -> None:
         self.clip_length=clip_length
         self.clip_start_point=clip_start_point
         
@@ -20,12 +20,25 @@ class Shorts:
         self.downloading_folder="download"
         
     def build(self, video_id:str)->bool:
+        print("getting data...")
         self.heat_data=self.get_heat(video_id)
+        print("got data.")
+        
+        print()
+        print(self.heat_data)
+        print()
         
         if self.heat_data:
+            print("downloading files...")
             downloaded_video=self.download(video_id)
-            if downloaded_video: 
-                return self.extract_clips(downloaded_video)
+            print("downloaded.")
+            
+            if downloaded_video:
+                print("extracting clips")
+                e=self.extract_clips(downloaded_video)
+                if e: 
+                    print(f"CLIPS CREATED IN {e}")
+                else: print("error during extraction of clips") 
             else: print("video not downloaded")
         else: print("video doesnt have a heatmap.")
         
@@ -59,12 +72,6 @@ class Shorts:
             if ((all([round(abs(x-rge),2)>self.clip_length for x in fd["top"]]) or i==0) and self.clip_length) and (rge!=0 or not skip_start):
                 fd["top"].append(rge)
                 if len(fd["top"])==3: break
-        
-        fd["clips"]=[
-            [h-self.clip_length*self.clip_start_point, h+self.clip_length*(1-self.clip_start_point)] 
-            for h in fd["top"]
-        ]
-
 
         request=requests.get(url=URL_LENGTH+video_id)
         data=json.loads(request.text)
@@ -78,6 +85,12 @@ class Shorts:
 
         fd["views"]=int(stats["viewCount"])
         fd["likes"]=int(stats["likeCount"])
+        
+        fd["clips"]=[
+            [max(0,h-self.clip_length*self.clip_start_point), 
+                min(fd["length"],h+self.clip_length*(1-self.clip_start_point))] 
+            for h in fd["top"]
+        ]
 
         return fd
 
@@ -92,9 +105,6 @@ class Shorts:
             return False
 
     def extract_clips(self, source:str):
-        print(source)
-        # download_
-        # https://stackoverflow.com/questions/37317140/cutting-out-a-portion-of-video-python
         n=source.split(".")[0].rsplit("/",1)[-1]
         p=f"clips/{n}"
         
@@ -102,7 +112,6 @@ class Shorts:
         
         with VideoFileClip(source) as video:
             for i,clip in enumerate(self.heat_data["clips"]):
-                print(i,self.heat_data["top"][i],clip)
                 new=video.subclip(clip[0], clip[1])
                 new.write_videofile(f"{p}/{i}.mp4", verbose=False, logger=None)
             return p
