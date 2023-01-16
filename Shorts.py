@@ -24,12 +24,10 @@ class Shorts:
         self.heat_data=self.get_heat(video_id)
         print("got data.")
         
-        print()
         print(self.heat_data)
-        print()
         
         if self.heat_data:
-            print("downloading files...")
+            print("downloading video...")
             downloaded_video=self.download(video_id)
             print("downloaded.")
             

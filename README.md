@@ -9,3 +9,5 @@
 
 ## To Do: 
 1. set shorts start/end based on the data recieved from the most replayed.
+2. possible to download only a partion of the video?
+3. do not pick only 3 top moments, pick as many as possible.
