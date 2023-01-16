@@ -1,4 +1,4 @@
-from Shorts import Shorts 
+from modules.Shorts import Shorts 
 
 s=Shorts()
 video_id=input("[ video_id ]: ")

@@ -1,7 +1,5 @@
-from pprint import pprint
 from pytube import YouTube
 
-# from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
 import requests
@@ -9,7 +7,7 @@ import json
 import re
 import os
 
-from urls import *
+from modules.urls import *
 
 class Shorts:
     def __init__(self, clip_length:float=30,clip_start_point:float=1/4) -> None:
@@ -34,8 +32,7 @@ class Shorts:
             if downloaded_video:
                 print("extracting clips")
                 e=self.extract_clips(downloaded_video)
-                if e: 
-                    print(f"CLIPS CREATED IN {e}")
+                if e: print(f"CLIPS CREATED IN {e}")
                 else: print("error during extraction of clips") 
             else: print("video not downloaded")
         else: print("video doesnt have a heatmap.")
